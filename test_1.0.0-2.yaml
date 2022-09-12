@@ -1,0 +1,69 @@
+swagger: '2.0'
+info:
+  title: Test
+  x-ibm-name: test
+  version: 1.0.0
+x-ibm-configuration:
+  cors:
+    enabled: true
+  gateway: datapower-api-gateway
+  type: rest
+  phase: realized
+  enforced: true
+  testable: true
+  assembly:
+    execute:
+      - map:
+          version: 2.0.0
+          title: map
+          inputs:
+            nombre:
+              schema:
+                type: string
+              variable: request.parameters.nombre
+          outputs:
+            response:
+              schema:
+                type: object
+                title: saludo
+                properties:
+                  saludo:
+                    type: string
+                    name: saludo
+              variable: message.body
+          actions:
+            - set: response.saludo
+              from: nombre
+              value: '"Hola Mundo: " +$(nombre)'
+    finally: []
+  properties:
+    target-url:
+      value: http://example.com/operation-name
+      description: The URL of the target service
+      encoded: false
+  activity-log:
+    enabled: true
+    success-content: activity
+    error-content: payload
+basePath: /test
+paths:
+  /mundo:
+    get:
+      responses:
+        '200':
+          description: success
+          schema:
+            type: object
+            title: saludo
+            properties:
+              saludo:
+                type: string
+      description: test
+      parameters:
+        - name: nombre
+          in: query
+          type: string
+          description: sasa
+schemes:
+  - https
+securityDefinitions: {}
